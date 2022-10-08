@@ -252,7 +252,7 @@ function lock_init() {
 }
 
 # DESC: Pretty print the provided string
-# ARGS: $1 (required): Message to print (defaults to a green foreground)
+# ARGS: $1 (required): Message to print
 #       $2 (optional): Colour to print the message with. This can be an ANSI
 #                      escape code or one of the prepopulated colour variables.
 #       $3 (optional): Set to any value to not append a new line to the message
@@ -265,8 +265,6 @@ function pretty_print() {
     if [[ -z ${no_colour-} ]]; then
         if [[ -n ${2-} ]]; then
             printf '%b' "$2"
-        else
-            printf '%b' "$fg_green"
         fi
     fi
 
@@ -281,10 +279,53 @@ function pretty_print() {
 # DESC: Only pretty_print() the provided string if verbose mode is enabled
 # ARGS: $@ (required): Passed through to pretty_print() function
 # OUTS: None
-function verbose_print() {
+function debug() {
     if [[ -n ${verbose-} ]]; then
         pretty_print "$@"
     fi
+}
+
+
+# DESC: Wrapper to pretty_print()
+# ARGS: $@ (required): Passed through to pretty_print() function
+# OUTS: None
+function info() {
+        pretty_print "$@" "$fg_white"
+}
+
+# DESC: Prints a waring message
+# ARGS: $@ (required): Passed through to pretty_print() function
+# OUTS: None
+function warn() {
+        pretty_print "$@" "$fg_yellow"
+}
+
+# DESC: Prints an error message
+# ARGS: $@ (required): Passed through to pretty_print() function
+# OUTS: None
+function error() {
+        pretty_print "$@" "$fg_red"
+}
+
+# DESC: Prints an success message
+# ARGS: $@ (required): Passed through to pretty_print() function
+# OUTS: None
+function success() {
+        pretty_print "$@" "$fg_green"
+}
+
+# DESC: Prints a prompt message
+# ARGS: $@ (required): Passed through to pretty_print() function
+# OUTS: None
+function prompt() {
+        pretty_print "$@" "$fg_blue"
+}
+
+# DESC: Prints a caution
+# ARGS: $1 (required): Prints a ca
+# OUTS: None
+function caution() {
+        printf "%b%b%b%b%s%b\n" "$ta_bold" "$ta_blink" "$bg_cyan" "$fg_red" "$1" "$ta_none"
 }
 
 # DESC: Combines two path variables and removes any duplicates
@@ -333,12 +374,12 @@ function check_binary() {
         if [[ -n ${2-} ]]; then
             script_exit "Missing dependency: Couldn't locate $1." 1
         else
-            verbose_print "Missing dependency: $1" "${fg_red-}"
+            debug "Missing dependency: $1" "${fg_red-}"
             return 1
         fi
     fi
 
-    verbose_print "Found dependency: $1"
+    debug "Found dependency: $1"
     return 0
 }
 
@@ -352,9 +393,9 @@ function check_superuser() {
     elif [[ -z ${1-} ]]; then
         # shellcheck disable=SC2310
         if check_binary sudo; then
-            verbose_print 'Sudo: Updating cached credentials ...'
+            debug 'Sudo: Updating cached credentials ...'
             if ! sudo -v; then
-                verbose_print "Sudo: Couldn't acquire credentials ..." \
+                debug "Sudo: Couldn't acquire credentials ..." \
                     "${fg_red-}"
             else
                 local test_euid
@@ -367,11 +408,11 @@ function check_superuser() {
     fi
 
     if [[ -z ${superuser-} ]]; then
-        verbose_print 'Unable to acquire superuser credentials.' "${fg_red-}"
+        debug 'Unable to acquire superuser credentials.' "${fg_red-}"
         return 1
     fi
 
-    verbose_print 'Successfully acquired superuser credentials.'
+    debug 'Successfully acquired superuser credentials.'
     return 0
 }
 

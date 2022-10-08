@@ -70,14 +70,30 @@ function parse_params() {
 # ARGS: $@ (optional): Arguments provided to the script
 # OUTS: None
 function main() {
+    # setup error
     trap script_trap_err ERR
     trap script_trap_exit EXIT
 
+    # initialise
     script_init "$@"
     parse_params "$@"
     cron_init
     colour_init
     #lock_init system
+
+    # Common functions sourced from source.sh
+    check_superuser
+    run_as_root whoami
+    check_binary curl
+
+    # Contextual output functions sourced from source.sh
+    debug "DEBUG MESSAGE "
+    info "INFO MESSAGE, plus dynamic content: $0"
+    success "SUCCESS MESSAGE"
+    warn "WARNING MESSAGE"
+    error "ERROR MESSAGE"
+    prompt "PROMPT MESSAGE, Enter your name: "
+    caution "CAUTION MESSAGE"
 }
 
 # shellcheck source=source.sh
