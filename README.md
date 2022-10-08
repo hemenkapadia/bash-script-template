@@ -5,11 +5,18 @@ bash-script-template
 
 A *Bash* scripting template incorporating best practices & several useful functions.
 
-- [Motivation](#motivation)
+- [Credits](#credits)
 - [Files](#files)
 - [Usage](#usage)
 - [Controversies](#controversies)
 - [License](#license)
+
+Credits
+-------
+
+This template is based on the following resources:
+
+- [Bash Script Template](https://github.com/ralish/bash-script-template)
 
 Motivation
 ----------
