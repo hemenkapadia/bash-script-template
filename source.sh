@@ -89,7 +89,7 @@ function script_exit() {
     fi
 
     if [[ ${2-} =~ ^[0-9]+$ ]]; then
-        printf '%b\n' "$1"
+        printf "%b%s%b\n" "$fg_red" "$1" "$ta_none"
         # If we've been provided a non-zero exit code run the error trap
         if [[ $2 -ne 0 ]]; then
             script_trap_err "$2"
@@ -125,7 +125,7 @@ function script_init() {
 
     # Important to always set as we use it in the exit handler
     # shellcheck disable=SC2155
-    readonly ta_none="$(tput sgr0 2> /dev/null || true)"
+    readonly ta_none="$(tput sgr0 2>/dev/null || true)"
 }
 
 # DESC: Initialise colour variables
@@ -138,51 +138,51 @@ function script_init() {
 function colour_init() {
     if [[ -z ${no_colour-} ]]; then
         # Text attributes
-        readonly ta_bold="$(tput bold 2> /dev/null || true)"
+        readonly ta_bold="$(tput bold 2>/dev/null || true)"
         printf '%b' "$ta_none"
-        readonly ta_uscore="$(tput smul 2> /dev/null || true)"
+        readonly ta_uscore="$(tput smul 2>/dev/null || true)"
         printf '%b' "$ta_none"
-        readonly ta_blink="$(tput blink 2> /dev/null || true)"
+        readonly ta_blink="$(tput blink 2>/dev/null || true)"
         printf '%b' "$ta_none"
-        readonly ta_reverse="$(tput rev 2> /dev/null || true)"
+        readonly ta_reverse="$(tput rev 2>/dev/null || true)"
         printf '%b' "$ta_none"
-        readonly ta_conceal="$(tput invis 2> /dev/null || true)"
+        readonly ta_conceal="$(tput invis 2>/dev/null || true)"
         printf '%b' "$ta_none"
 
         # Foreground codes
-        readonly fg_black="$(tput setaf 0 2> /dev/null || true)"
+        readonly fg_black="$(tput setaf 0 2>/dev/null || true)"
         printf '%b' "$ta_none"
-        readonly fg_blue="$(tput setaf 4 2> /dev/null || true)"
+        readonly fg_blue="$(tput setaf 4 2>/dev/null || true)"
         printf '%b' "$ta_none"
-        readonly fg_cyan="$(tput setaf 6 2> /dev/null || true)"
+        readonly fg_cyan="$(tput setaf 6 2>/dev/null || true)"
         printf '%b' "$ta_none"
-        readonly fg_green="$(tput setaf 2 2> /dev/null || true)"
+        readonly fg_green="$(tput setaf 2 2>/dev/null || true)"
         printf '%b' "$ta_none"
-        readonly fg_magenta="$(tput setaf 5 2> /dev/null || true)"
+        readonly fg_magenta="$(tput setaf 5 2>/dev/null || true)"
         printf '%b' "$ta_none"
-        readonly fg_red="$(tput setaf 1 2> /dev/null || true)"
+        readonly fg_red="$(tput setaf 1 2>/dev/null || true)"
         printf '%b' "$ta_none"
-        readonly fg_white="$(tput setaf 7 2> /dev/null || true)"
+        readonly fg_white="$(tput setaf 7 2>/dev/null || true)"
         printf '%b' "$ta_none"
-        readonly fg_yellow="$(tput setaf 3 2> /dev/null || true)"
+        readonly fg_yellow="$(tput setaf 3 2>/dev/null || true)"
         printf '%b' "$ta_none"
 
         # Background codes
-        readonly bg_black="$(tput setab 0 2> /dev/null || true)"
+        readonly bg_black="$(tput setab 0 2>/dev/null || true)"
         printf '%b' "$ta_none"
-        readonly bg_blue="$(tput setab 4 2> /dev/null || true)"
+        readonly bg_blue="$(tput setab 4 2>/dev/null || true)"
         printf '%b' "$ta_none"
-        readonly bg_cyan="$(tput setab 6 2> /dev/null || true)"
+        readonly bg_cyan="$(tput setab 6 2>/dev/null || true)"
         printf '%b' "$ta_none"
-        readonly bg_green="$(tput setab 2 2> /dev/null || true)"
+        readonly bg_green="$(tput setab 2 2>/dev/null || true)"
         printf '%b' "$ta_none"
-        readonly bg_magenta="$(tput setab 5 2> /dev/null || true)"
+        readonly bg_magenta="$(tput setab 5 2>/dev/null || true)"
         printf '%b' "$ta_none"
-        readonly bg_red="$(tput setab 1 2> /dev/null || true)"
+        readonly bg_red="$(tput setab 1 2>/dev/null || true)"
         printf '%b' "$ta_none"
-        readonly bg_white="$(tput setab 7 2> /dev/null || true)"
+        readonly bg_white="$(tput setab 7 2>/dev/null || true)"
         printf '%b' "$ta_none"
-        readonly bg_yellow="$(tput setab 3 2> /dev/null || true)"
+        readonly bg_yellow="$(tput setab 3 2>/dev/null || true)"
         printf '%b' "$ta_none"
     else
         # Text attributes
@@ -222,7 +222,7 @@ function cron_init() {
         # Redirect all output to a temporary file
         script_output="$(mktemp --tmpdir "$script_name".XXXXX)"
         readonly script_output
-        exec 3>&1 4>&2 1> "$script_output" 2>&1
+        exec 3>&1 4>&2 1>"$script_output" 2>&1
     fi
 }
 
@@ -243,7 +243,7 @@ function lock_init() {
         script_exit 'Missing or invalid argument to lock_init()!' 2
     fi
 
-    if mkdir "$lock_dir" 2> /dev/null; then
+    if mkdir "$lock_dir" 2>/dev/null; then
         readonly script_lock="$lock_dir"
         verbose_print "Acquired script lock: $script_lock"
     else
@@ -285,47 +285,46 @@ function debug() {
     fi
 }
 
-
 # DESC: Wrapper to pretty_print()
 # ARGS: $@ (required): Passed through to pretty_print() function
 # OUTS: None
 function info() {
-        pretty_print "$@" "$fg_white"
+    pretty_print "$@" "$fg_white"
 }
 
 # DESC: Prints a waring message
 # ARGS: $@ (required): Passed through to pretty_print() function
 # OUTS: None
 function warn() {
-        pretty_print "$@" "$fg_yellow"
+    pretty_print "$@" "$fg_yellow"
 }
 
 # DESC: Prints an error message
 # ARGS: $@ (required): Passed through to pretty_print() function
 # OUTS: None
 function error() {
-        pretty_print "$@" "$fg_red"
+    pretty_print "$@" "$fg_red"
 }
 
 # DESC: Prints an success message
 # ARGS: $@ (required): Passed through to pretty_print() function
 # OUTS: None
 function success() {
-        pretty_print "$@" "$fg_green"
+    pretty_print "$@" "$fg_green"
 }
 
 # DESC: Prints a prompt message
 # ARGS: $@ (required): Passed through to pretty_print() function
 # OUTS: None
 function prompt() {
-        pretty_print "$@" "$fg_blue"
+    pretty_print "$@" "$fg_blue"
 }
 
 # DESC: Prints a caution
 # ARGS: $1 (required): Prints a ca
 # OUTS: None
 function caution() {
-        printf "%b%b%b%b%s%b\n" "$ta_bold" "$ta_blink" "$bg_cyan" "$fg_red" "$1" "$ta_none"
+    printf "%b%b%b%b%s%b\n" "$ta_bold" "$ta_blink" "$bg_cyan" "$fg_red" "$1" "$ta_none"
 }
 
 # DESC: Combines two path variables and removes any duplicates
@@ -349,10 +348,10 @@ function build_path() {
     while [[ -n $temp_path ]]; do
         path_entry="${temp_path%%:*}"
         case "$new_path:" in
-            *:"$path_entry":*) ;;
-            *)
-                new_path="$new_path:$path_entry"
-                ;;
+        *:"$path_entry":*) ;;
+        *)
+            new_path="$new_path:$path_entry"
+            ;;
         esac
         temp_path="${temp_path#*:}"
     done
@@ -370,12 +369,11 @@ function check_binary() {
         script_exit 'Missing required argument to check_binary()!' 2
     fi
 
-    if ! command -v "$1" > /dev/null 2>&1; then
+    if ! command -v "$1" >/dev/null 2>&1; then
         if [[ -n ${2-} ]]; then
             script_exit "Missing dependency: Couldn't locate $1." 1
         else
-            debug "Missing dependency: $1" "${fg_red-}"
-            return 1
+            script_exit "Missing dependency: $1" 1
         fi
     fi
 
