@@ -38,7 +38,8 @@ function build_template() {
     header="
 # A best practices Bash script template with many useful functions. This file
 # combines the source.sh & script.sh files into a single script. If you want
-# your script to be entirely self-contained then this should be what you want!"
+# your script to be entirely self-contained then this should be what you want!
+# Reference: https://github.com/hemenkapadia/bash-script-template"
 
     source_file="$script_dir/source.sh"
     script_file="$script_dir/script.sh"
