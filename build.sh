@@ -43,9 +43,9 @@ function build_template() {
     source_file="$script_dir/source.sh"
     script_file="$script_dir/script.sh"
 
-    script_options="$(head -n 26 "$script_file" | tail -n 17)"
-    source_data="$(tail -n +10 "$source_file" | head -n -1)"
-    script_data="$(tail -n +27 "$script_file")"
+    script_options="$(head -n 27 "$script_file" | tail -n 17)"
+    source_data="$(tail -n +12 "$source_file" | head -n -1)"
+    script_data="$(tail -n +30 "$script_file")"
 
     {
         printf '%s\n' "$shebang"
@@ -64,6 +64,6 @@ function build_template() {
 }
 
 # Template, assemble!
-main
+main "$@"
 
 # vim: syntax=sh cc=80 tw=79 ts=4 sw=4 sts=4 et sr

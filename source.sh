@@ -7,6 +7,8 @@
 # - parse_params()
 # - script_usage()
 
+# <-- BEGIN: Script below is used by build.sh to make template.sh -->
+
 # DESC: Handler for unexpected errors
 # ARGS: $1 (optional): Exit code (defaults to 1)
 # OUTS: None
@@ -384,6 +386,7 @@ function check_binary() {
 # DESC: Validate we have superuser access as root (via sudo if requested)
 # ARGS: $1 (optional): Set to any value to not attempt root access via sudo
 # OUTS: None
+# shellcheck disable=SC2120
 function check_superuser() {
     local superuser
     if [[ $EUID -eq 0 ]]; then

@@ -398,6 +398,7 @@ function check_binary() {
 # DESC: Validate we have superuser access as root (via sudo if requested)
 # ARGS: $1 (optional): Set to any value to not attempt root access via sudo
 # OUTS: None
+# shellcheck disable=SC2120
 function check_superuser() {
     local superuser
     if [[ $EUID -eq 0 ]]; then
@@ -451,6 +452,7 @@ function run_as_root() {
     fi
 }
 
+# <-- BEGIN: Start writing script below this line -->
 # DESC: Usage help
 # ARGS: None
 # OUTS: None
@@ -542,7 +544,10 @@ function main() {
     validate_dependencies
 
     # check operations as root
+    # via sudo from within the script
     check_superuser
+    # when script is run as sudo
+    # check_superuser 0
     run_as_root whoami
 
     # Contextual output functions sourced from source.sh
