@@ -332,7 +332,7 @@ function success() {
 # ARGS: $@ (required): Passed through to pretty_print() function
 # OUTS: None
 function prompt() {
-    pretty_print "$@" "$fg_blue"
+    pretty_print "$@" "$fg_blue" "no_newline"
 }
 
 # DESC: Prints a caution
@@ -557,8 +557,13 @@ function main() {
     success "SUCCESS MESSAGE"
     warn "WARNING MESSAGE"
     error "ERROR MESSAGE"
-    prompt "PROMPT MESSAGE, Enter your name: "
     caution "CAUTION MESSAGE"
+
+    # reading input
+    prompt "PROMPT MESSAGE, Enter your name: "
+    local input_text
+    read -r input_text
+    info "INFO MESSAGE, value entered is : ${input_text}"
 }
 
 # Invoke main with args if not sourced

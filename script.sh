@@ -131,8 +131,13 @@ function main() {
     success "SUCCESS MESSAGE"
     warn "WARNING MESSAGE"
     error "ERROR MESSAGE"
-    prompt "PROMPT MESSAGE, Enter your name: "
     caution "CAUTION MESSAGE"
+
+    # reading input
+    prompt "PROMPT MESSAGE, Enter your name: "
+    local input_text
+    read -r input_text
+    info "INFO MESSAGE, value entered is : ${input_text}"
 }
 
 # shellcheck source=source.sh

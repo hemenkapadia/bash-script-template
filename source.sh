@@ -319,7 +319,7 @@ function success() {
 # ARGS: $@ (required): Passed through to pretty_print() function
 # OUTS: None
 function prompt() {
-    pretty_print "$@" "$fg_blue"
+    pretty_print "$@" "$fg_blue" "no_newline"
 }
 
 # DESC: Prints a caution
