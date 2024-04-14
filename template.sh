@@ -99,12 +99,12 @@ function script_trap_exit() {
 #       2: Abnormal exit due to script error
 function script_exit() {
     if [[ $# -eq 1 ]]; then
-        printf '%s\n' "$1"
+        error "$1"
         exit 0
     fi
 
     if [[ ${2-} =~ ^[0-9]+$ ]]; then
-        printf "%b%s%b\n" "$fg_red" "$1" "$ta_none"
+        error "$1"
         # If we've been provided a non-zero exit code run the error trap
         if [[ $2 -ne 0 ]]; then
             script_trap_err "$2"
@@ -300,6 +300,13 @@ function debug() {
     fi
 }
 
+# DESC: Prints a header
+# ARGS: $1 (required): Prints a header
+# OUTS: None
+function header() {
+    printf "%b%b%s%b\n" "$ta_bold" "$fg_magenta" "$1" "$ta_none"
+}
+
 # DESC: Wrapper to pretty_print()
 # ARGS: $@ (required): Passed through to pretty_print() function
 # OUTS: None
@@ -453,13 +460,15 @@ function run_as_root() {
     fi
 }
 
-# <-- BEGIN: Start writing script below this line -->
+# <-- SCRIPT_DATA_BEGIN: Start writing script below this line -->
 # DESC: Usage help
 # ARGS: None
 # OUTS: None
 function script_usage() {
     cat <<EOF
-Usage:
+Usage: $script_name [options]
+
+options:
      -a1|--arg1 <arg1>          Mandatory Argument 1
      -a2|--arg2 <arg1>          Optional Argument 2
      -h|--help                  Displays this help
@@ -501,6 +510,7 @@ function parse_params() {
             cron=true
             ;;
         *)
+            script_usage
             script_exit "Invalid parameter was provided: $param" 1
             ;;
         esac
@@ -515,6 +525,8 @@ function validate_params() {
         script_usage
         script_exit "Argument 1 is required" 1
     fi
+    info "Argument 1: $arg1"
+    success "Arguments validated"
 }
 
 #DESC: Validate required dependencies
@@ -523,6 +535,7 @@ function validate_params() {
 function validate_dependencies() {
     check_binary "curl"
     #    check_binary "fails" # Uncomment to test failure
+    success "Dependencies validated"
 }
 
 # DESC: Main control flow
