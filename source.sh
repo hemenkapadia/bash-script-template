@@ -86,12 +86,12 @@ function script_trap_exit() {
 #       2: Abnormal exit due to script error
 function script_exit() {
     if [[ $# -eq 1 ]]; then
-        printf '%s\n' "$1"
+        error "$1"
         exit 0
     fi
 
     if [[ ${2-} =~ ^[0-9]+$ ]]; then
-        printf "%b%s%b\n" "$fg_red" "$1" "$ta_none"
+        error "$1"
         # If we've been provided a non-zero exit code run the error trap
         if [[ $2 -ne 0 ]]; then
             script_trap_err "$2"
@@ -285,6 +285,13 @@ function debug() {
     if [[ -n ${verbose-} ]]; then
         pretty_print "$@"
     fi
+}
+
+# DESC: Prints a header
+# ARGS: $1 (required): Prints a header
+# OUTS: None
+function header() {
+    printf "%b%b%s%b\n" "$ta_bold" "$fg_magenta" "$1" "$ta_none"
 }
 
 # DESC: Wrapper to pretty_print()

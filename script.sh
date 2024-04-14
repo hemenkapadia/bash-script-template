@@ -32,7 +32,9 @@ set -o errtrace # Ensure the error trap handler is inherited
 # OUTS: None
 function script_usage() {
     cat <<EOF
-Usage:
+Usage: $script_name [options]
+
+options:
      -a1|--arg1 <arg1>          Mandatory Argument 1
      -a2|--arg2 <arg1>          Optional Argument 2
      -h|--help                  Displays this help
@@ -74,6 +76,7 @@ function parse_params() {
             cron=true
             ;;
         *)
+            script_usage
             script_exit "Invalid parameter was provided: $param" 1
             ;;
         esac
@@ -88,6 +91,8 @@ function validate_params() {
         script_usage
         script_exit "Argument 1 is required" 1
     fi
+    info "Argument 1: $arg1"
+    success "Arguments validated"
 }
 
 #DESC: Validate required dependencies
@@ -96,6 +101,7 @@ function validate_params() {
 function validate_dependencies() {
     check_binary "curl"
     #    check_binary "fails" # Uncomment to test failure
+    success "Dependencies validated"
 }
 
 # DESC: Main control flow
