@@ -33,6 +33,7 @@ function build_template() {
     local shebang header
     local source_file script_file
     local script_options source_data script_data
+    local script_options_begin script_options_end script_data_begin source_data_begin
 
     shebang="#!/usr/bin/env bash"
     header="
@@ -44,9 +45,14 @@ function build_template() {
     source_file="$script_dir/source.sh"
     script_file="$script_dir/script.sh"
 
-    script_options="$(head -n 27 "$script_file" | tail -n 17)"
-    source_data="$(tail -n +12 "$source_file" | head -n -1)"
-    script_data="$(tail -n +30 "$script_file")"
+    script_options_begin="$(grep -n 'SCRIPT_OPTIONS_BEGIN' "$script_file" | cut -d: -f1)"
+    script_options_end="$(grep -n 'SCRIPT_OPTIONS_END' "$script_file" | cut -d: -f1)"
+    script_data_begin="$(grep -n 'SCRIPT_DATA_BEGIN' "$script_file" | cut -d: -f1)"
+    source_data_begin="$(grep -n 'SOURCE_DATA_BEGIN' "$source_file" | cut -d: -f1)"
+
+    script_options="$(head -n $((script_options_end - 1)) "$script_file" | tail -n $((script_options_end - script_options_begin - 1)))"
+    source_data="$(tail -n +$((source_data_begin + 2)) "$source_file" | head -n -1)"
+    script_data="$(tail -n +$((script_data_begin)) "$script_file")"
 
     {
         printf '%s\n' "$shebang"

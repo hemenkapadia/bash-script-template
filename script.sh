@@ -7,7 +7,7 @@
 # writing several scripts! By pulling in the common functions you'll minimise
 # code duplication, as well as ease any potential updates to shared functions.
 
-# <-- BEGIN: Script below this marker used by build.sh to make template.sh -->
+# <-- SCRIPT_OPTIONS_BEGIN: Script below this marker used by build.sh to make template.sh -->
 # Enable xtrace if the DEBUG environment variable is set
 if [[ ${DEBUG-} =~ ^1|yes|true$ ]]; then
     set -o xtrace # Trace the execution of the script (debug)
@@ -24,10 +24,9 @@ fi
 
 # Enable errtrace or the error trap handler will not work as expected
 set -o errtrace # Ensure the error trap handler is inherited
+# <-- SCRIPT_OPTIONS_END: above this marker used by build.sh to make template.sh -->
 
-# <-- END: above this marker used by build.sh to make template.sh -->
-
-# <-- BEGIN: Start writing script below this line -->
+# <-- SCRIPT_DATA_BEGIN: Start writing script below this line -->
 # DESC: Usage help
 # ARGS: None
 # OUTS: None

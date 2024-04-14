@@ -7,7 +7,7 @@
 # - parse_params()
 # - script_usage()
 
-# <-- BEGIN: Script below is used by build.sh to make template.sh -->
+# <-- SOURCE_DATA_BEGIN: Script below is used by build.sh to make template.sh -->
 
 # DESC: Handler for unexpected errors
 # ARGS: $1 (optional): Exit code (defaults to 1)
